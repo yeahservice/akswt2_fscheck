@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsCheckTest", "FsCheckTest\FsCheckTest.csproj", "{15634D79-2B19-400D-AA24-4BEB62F55FF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsCheckTest.test", "FsCheckTest.test\FsCheckTest.test.csproj", "{01D16D12-5CA0-43C0-B979-75216F67DE19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15634D79-2B19-400D-AA24-4BEB62F55FF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15634D79-2B19-400D-AA24-4BEB62F55FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15634D79-2B19-400D-AA24-4BEB62F55FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15634D79-2B19-400D-AA24-4BEB62F55FF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01D16D12-5CA0-43C0-B979-75216F67DE19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01D16D12-5CA0-43C0-B979-75216F67DE19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01D16D12-5CA0-43C0-B979-75216F67DE19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01D16D12-5CA0-43C0-B979-75216F67DE19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
