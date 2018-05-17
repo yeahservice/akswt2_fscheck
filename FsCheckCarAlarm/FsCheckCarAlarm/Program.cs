@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FsCheck;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,12 @@ namespace FsCheckCarAlarm
     {
         static void Main(string[] args)
         {
+            new CarAlarmSpec()
+                .ToProperty()
+                .QuickCheck();
+
+            Console.WriteLine("Press enter to close...");
+            Console.ReadLine();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace FsCheckCarAlarm
                 case CarAlarmState.OpenAndUnlocked:
                     currentState = CarAlarmState.ClosedAndUnlocked;
                     break;
-                case CarAlarmState.ClosedAndLocked:
+                case CarAlarmState.OpenAndLocked:
                     currentState = CarAlarmState.ClosedAndLocked;
                     break;
             }
@@ -68,6 +68,11 @@ namespace FsCheckCarAlarm
                     currentState = CarAlarmState.ClosedAndUnlocked;
                     break;
             }
+        }
+
+        public CarAlarmState getState()
+        {
+            return this.currentState;
         }
 
         public void tick()
