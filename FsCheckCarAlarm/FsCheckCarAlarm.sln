@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsCheckCarAlarm", "FsCheckCarAlarm\FsCheckCarAlarm.csproj", "{78A9E2D0-D2FF-45CD-BC3D-17A8678CD78F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsCheckCarAlarm.Test", "FsCheckCarAlarm.Test\FsCheckCarAlarm.Test.csproj", "{EC17B9DA-6854-4104-B335-11B655099AB7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{78A9E2D0-D2FF-45CD-BC3D-17A8678CD78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78A9E2D0-D2FF-45CD-BC3D-17A8678CD78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78A9E2D0-D2FF-45CD-BC3D-17A8678CD78F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC17B9DA-6854-4104-B335-11B655099AB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC17B9DA-6854-4104-B335-11B655099AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC17B9DA-6854-4104-B335-11B655099AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC17B9DA-6854-4104-B335-11B655099AB7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
