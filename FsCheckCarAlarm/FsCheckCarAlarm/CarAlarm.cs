@@ -18,7 +18,7 @@ namespace FsCheckCarAlarm
     {
         private CarAlarmState currentState = CarAlarmState.OpenAndUnlocked;
 
-        public void openCar()
+        public void Open()
         {
             switch (currentState)
             {
@@ -31,7 +31,7 @@ namespace FsCheckCarAlarm
             }
         }
 
-        public void closeCar()
+        public void Close()
         {
             switch (currentState)
             {
@@ -44,7 +44,7 @@ namespace FsCheckCarAlarm
             }
         }
 
-        public void lockCar()
+        public void Lock()
         {
             switch (currentState)
             {
@@ -57,7 +57,7 @@ namespace FsCheckCarAlarm
             }
         }
 
-        public void unlockCar()
+        public void Unlock()
         {
             switch (currentState)
             {
@@ -70,12 +70,12 @@ namespace FsCheckCarAlarm
             }
         }
 
-        public CarAlarmState getState()
+        public CarAlarmState GetState()
         {
             return this.currentState;
         }
 
-        public void tick()
+        public void Tick()
         {
 
         }

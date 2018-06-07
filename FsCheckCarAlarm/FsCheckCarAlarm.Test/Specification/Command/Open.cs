@@ -1,17 +1,18 @@
 ﻿using FsCheck;
+using FsCheckCarAlarm.FSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FsCheckCarAlarm.Specification.Command
+namespace FsCheckCarAlarm.Test.Specification.Command
 {
     public class Open : Command<CarAlarm, CarAlarmState>
     {
         public override CarAlarm RunActual(CarAlarm carAlarm)
         {
-            carAlarm.openCar();
+            carAlarm.Open();
             return carAlarm;
         }
 
@@ -36,7 +37,7 @@ namespace FsCheckCarAlarm.Specification.Command
 
         public override Property Post(CarAlarm carAlarm, CarAlarmState carAlarmState)
         {
-            return (carAlarm.getState() == carAlarmState).ToProperty();
+            return (carAlarm.State == carAlarmState).ToProperty();
         }
 
         public override string ToString()

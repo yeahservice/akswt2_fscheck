@@ -1,12 +1,13 @@
 ﻿using FsCheck;
-using FsCheckCarAlarm.Specification.Command;
+using FsCheckCarAlarm.FSharp;
+using FsCheckCarAlarm.Test.Specification.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FsCheckCarAlarm
+namespace FsCheckCarAlarm.Test
 {
     public class CarAlarmSpec : ICommandGenerator<CarAlarm, CarAlarmState>
     {

@@ -70,9 +70,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FsCheckCarAlarm\FsCheckCarAlarm.csproj">
-      <Project>{78a9e2d0-d2ff-45cd-bc3d-17a8678cd78f}</Project>
-      <Name>FsCheckCarAlarm</Name>
+    <ProjectReference Include="..\FsCheckCarAlarm.FSharp\FsCheckCarAlarm.FSharp.fsproj">
+      <Project>{11927fe3-f9b1-4a65-916a-d2dd735cf75d}</Project>
+      <Name>FsCheckCarAlarm.FSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

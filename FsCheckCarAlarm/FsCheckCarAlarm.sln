@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsCheckCarAlarm", "FsCheckC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsCheckCarAlarm.Test", "FsCheckCarAlarm.Test\FsCheckCarAlarm.Test.csproj", "{EC17B9DA-6854-4104-B335-11B655099AB7}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FsCheckCarAlarm.FSharp", "FsCheckCarAlarm.FSharp\FsCheckCarAlarm.FSharp.fsproj", "{11927FE3-F9B1-4A65-916A-D2DD735CF75D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EC17B9DA-6854-4104-B335-11B655099AB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC17B9DA-6854-4104-B335-11B655099AB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC17B9DA-6854-4104-B335-11B655099AB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11927FE3-F9B1-4A65-916A-D2DD735CF75D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11927FE3-F9B1-4A65-916A-D2DD735CF75D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11927FE3-F9B1-4A65-916A-D2DD735CF75D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11927FE3-F9B1-4A65-916A-D2DD735CF75D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
