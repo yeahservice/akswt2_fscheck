@@ -1,40 +1,35 @@
 ﻿using FsCheck;
-using FsCheckCarAlarm.FSharp;
-using FsCheckCarAlarm.Test.Specification.Command;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FsCheckCarAlarm.Test.Specification;
+
 
 namespace FsCheckCarAlarm.Test
 {
-    public class CarAlarmSpec : ICommandGenerator<CarAlarm, CarAlarmState>
+    public class CarAlarmSpec : ICommandGenerator<SUT, Model>
     {
-        public CarAlarm InitialActual
+        public SUT InitialActual
         {
             get
             {
-                return new CarAlarm();
+                return new SUT();
             }
         }
 
-        public CarAlarmState InitialModel
+        public Model InitialModel
         {
             get
             {
-                return CarAlarmState.OpenAndUnlocked;
+                return new Model();
             }
         }
 
-        public Gen<Command<CarAlarm, CarAlarmState>> Next(CarAlarmState value)
+        public Gen<Command<SUT, Model>> Next(Model model)
         {
-            return Gen.Elements(new Command<CarAlarm, CarAlarmState>[] 
+            return Gen.Elements(new Command<SUT, Model>[] 
             {
-                new Lock(),
-                new Unlock(),
-                new Open(),
-                new Close()
+                new DynamicCommand(Action.Lock),
+                new DynamicCommand(Action.Unlock),
+                new DynamicCommand(Action.Open),
+                new DynamicCommand(Action.Close)
             });
         }
     }

@@ -1,17 +1,17 @@
-﻿using FsCheckCarAlarm.FSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace FsCheckCarAlarm.Test.Specification
 {
     public class Model
     {
-        private CarAlarmState state;
+        public CarAlarmState State { get; private set; }
+
         private Dictionary<Tuple<CarAlarmState, Action>, CarAlarmState> transitions;
 
         public Model()
         {
-            this.state = CarAlarmState.OpenAndUnlocked;
+            this.State = CarAlarmState.OpenAndUnlocked;
             this.transitions = new Dictionary<Tuple<CarAlarmState, Action>, CarAlarmState>()
             {
                 { Tuple.Create(CarAlarmState.OpenAndUnlocked, Action.Close), CarAlarmState.ClosedAndUnlocked },
@@ -26,12 +26,14 @@ namespace FsCheckCarAlarm.Test.Specification
 
         }
 
+
+
         public void makeTransition(Action action)
         {
             CarAlarmState newState;
-            if (transitions.TryGetValue(Tuple.Create(this.state, action), out newState))
+            if (transitions.TryGetValue(Tuple.Create(this.State, action), out newState))
             {
-                this.state = newState;
+                this.State = newState;
             }
         }
     }

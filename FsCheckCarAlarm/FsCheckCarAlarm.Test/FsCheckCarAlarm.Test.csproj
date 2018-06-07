@@ -60,19 +60,20 @@
   <ItemGroup>
     <Compile Include="PropertyBasedTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Specification\Action.cs" />
     <Compile Include="Specification\CarAlarmSpec.cs" />
-    <Compile Include="Specification\Command\Close.cs" />
-    <Compile Include="Specification\Command\Lock.cs" />
-    <Compile Include="Specification\Command\Open.cs" />
-    <Compile Include="Specification\Command\Unlock.cs" />
+    <Compile Include="Specification\DynamicCommand.cs" />
+    <Compile Include="Specification\Model.cs" />
+    <Compile Include="Specification\SUT.cs" />
+    <Compile Include="Specification\Transition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FsCheckCarAlarm.FSharp\FsCheckCarAlarm.FSharp.fsproj">
-      <Project>{11927fe3-f9b1-4a65-916a-d2dd735cf75d}</Project>
-      <Name>FsCheckCarAlarm.FSharp</Name>
+    <ProjectReference Include="..\FsCheckCarAlarm\FsCheckCarAlarm.csproj">
+      <Project>{78a9e2d0-d2ff-45cd-bc3d-17a8678cd78f}</Project>
+      <Name>FsCheckCarAlarm</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
