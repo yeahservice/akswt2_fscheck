@@ -9,7 +9,7 @@ namespace FsCheckCarAlarm.Test.Specification
         {
             get
             {
-                return this.carAlarm.GetState();
+                return this.carAlarm.State;
             }
         }
 
@@ -18,9 +18,31 @@ namespace FsCheckCarAlarm.Test.Specification
             this.carAlarm = new CarAlarm();
         }
 
-        public void executeAction(Action action)
+        public void ExecuteAction(Action action)
         {
-            MethodInfo methodInfo = carAlarm.GetType().GetMethod(action.ToString());
+            switch (action)
+            {
+                case Action.Tick20:
+                    for (int i = 0; i < 20; ++i)
+                    {
+                        CallSUTMethod("Tick");
+                    }
+                    break;
+                case Action.Tick300:
+                    for (int i = 0; i < 300; ++i)
+                    {
+                        CallSUTMethod("Tick");
+                    }
+                    break;
+                default:
+                    CallSUTMethod(action.ToString());
+                    break;
+            }
+        }
+
+        private void CallSUTMethod(string name)
+        {
+            MethodInfo methodInfo = carAlarm.GetType().GetMethod(name);
             methodInfo.Invoke(this.carAlarm, null);
         }
     }

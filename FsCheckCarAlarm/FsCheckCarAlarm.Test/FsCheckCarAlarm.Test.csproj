@@ -65,7 +65,6 @@
     <Compile Include="Specification\DynamicCommand.cs" />
     <Compile Include="Specification\Model.cs" />
     <Compile Include="Specification\SUT.cs" />
-    <Compile Include="Specification\Transition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

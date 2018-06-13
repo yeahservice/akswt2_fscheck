@@ -12,7 +12,7 @@ namespace FsCheckCarAlarm.Test
         {
             new CarAlarmSpec()
                 .ToProperty()
-                .QuickCheckThrowOnFailure();
+                .VerboseCheckThrowOnFailure();
         }
     }
 }

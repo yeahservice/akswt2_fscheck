@@ -11,6 +11,8 @@ namespace FsCheckCarAlarm.Test.Specification
         Close,
         Open,
         Lock,
-        Unlock
+        Unlock,
+        Tick20,
+        Tick300
     }
 }
