@@ -13,6 +13,7 @@ namespace FsCheckCarAlarm
         private string pin = "1234";
         private int pinChangeAttempts = 0;
         private int unlockAttempts = 0;
+        private int closedDoors = 0;
 
         public CarAlarmState State
         {
@@ -41,35 +42,45 @@ namespace FsCheckCarAlarm
             }
         }
 
-        public void Open()
+        public void OpenDoor()
         {
-            switch (state)
+            closedDoors--;
+
+            if (closedDoors < 4)
             {
-                case CarAlarmState.ClosedAndUnlocked:
-                    ChangeState(CarAlarmState.ClosedAndUnlocked, CarAlarmState.OpenAndUnlocked); 
-                    break;
-                case CarAlarmState.ClosedAndLocked:
-                    ChangeState(CarAlarmState.ClosedAndLocked, CarAlarmState.OpenAndLocked);
-                    break;
-                case CarAlarmState.Armed:
-                    ChangeState(CarAlarmState.Armed, CarAlarmState.FlashAndSound);
-                    break;
+                switch (state)
+                {
+                    case CarAlarmState.ClosedAndUnlocked:
+                        ChangeState(CarAlarmState.ClosedAndUnlocked, CarAlarmState.OpenAndUnlocked);
+                        break;
+                    case CarAlarmState.ClosedAndLocked:
+                        ChangeState(CarAlarmState.ClosedAndLocked, CarAlarmState.OpenAndLocked);
+                        break;
+                    case CarAlarmState.Armed:
+                        ChangeState(CarAlarmState.Armed, CarAlarmState.FlashAndSound);
+                        break;
+                }
             }
         }
 
-        public void Close()
+        public void CloseDoor()
         {
-            switch (state)
+            closedDoors++;
+
+            if (closedDoors == 4)
             {
-                case CarAlarmState.OpenAndUnlocked:
-                    ChangeState(CarAlarmState.OpenAndUnlocked, CarAlarmState.ClosedAndUnlocked);
-                    break;
-                case CarAlarmState.OpenAndLocked:
-                    ChangeState(CarAlarmState.OpenAndLocked, CarAlarmState.ClosedAndLocked);
-                    break;
-                case CarAlarmState.SilentAndOpen:
-                    ChangeState(CarAlarmState.SilentAndOpen, CarAlarmState.Armed); 
-                    break;
+                switch (state)
+                {
+                    case CarAlarmState.OpenAndUnlocked:
+                        ChangeState(CarAlarmState.OpenAndUnlocked, CarAlarmState.ClosedAndUnlocked);
+                        break;
+                    case CarAlarmState.OpenAndLocked:
+                        ChangeState(CarAlarmState.OpenAndLocked, CarAlarmState.ClosedAndLocked);
+                        break;
+                    case CarAlarmState.SilentAndOpen:
+                        ChangeState(CarAlarmState.SilentAndOpen, CarAlarmState.Armed);
+                        break;
+                }
             }
         }
 

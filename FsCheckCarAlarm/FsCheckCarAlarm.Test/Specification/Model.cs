@@ -11,6 +11,7 @@ namespace FsCheckCarAlarm.Test.Specification
         private string pin;
         private int unlockAttempts = 0;
         private int pinChangeAttempts = 0;
+        private int closedDoors = 0;
 
         public CarAlarmState State
         {
@@ -29,24 +30,24 @@ namespace FsCheckCarAlarm.Test.Specification
 
             this.transitions = new HashSet<Transition>()
             {
-                { new Transition(CarAlarmState.OpenAndUnlocked, Action.Close, CarAlarmState.ClosedAndUnlocked) },
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.CloseDoor, CarAlarmState.OpenAndUnlocked, CarAlarmState.ClosedAndUnlocked) },
                 { new Transition(CarAlarmState.OpenAndUnlocked, Action.Lock, CarAlarmState.OpenAndLocked) },
 
                 { new Transition(CarAlarmState.OpenAndLocked, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.OpenAndLocked, Action.UnlockWithPinWrong, CarAlarmState.OpenAndLocked) },
-                { new Transition(CarAlarmState.OpenAndLocked, Action.Close, CarAlarmState.ClosedAndLocked) },
+                { new Transition(CarAlarmState.OpenAndLocked, Action.CloseDoor, CarAlarmState.OpenAndLocked, CarAlarmState.ClosedAndLocked) },
 
-                { new Transition(CarAlarmState.ClosedAndUnlocked, Action.Open, CarAlarmState.OpenAndUnlocked) },
+                { new Transition(CarAlarmState.ClosedAndUnlocked, Action.OpenDoor, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.ClosedAndUnlocked, Action.Lock, CarAlarmState.ClosedAndLocked) },
 
                 { new Transition(CarAlarmState.ClosedAndLocked, Action.UnlockWithPinCorrect, CarAlarmState.ClosedAndUnlocked) },
                 { new Transition(CarAlarmState.ClosedAndLocked, Action.UnlockWithPinWrong, CarAlarmState.ClosedAndLocked) },
-                { new Transition(CarAlarmState.ClosedAndLocked, Action.Open, CarAlarmState.OpenAndLocked) },
+                { new Transition(CarAlarmState.ClosedAndLocked, Action.OpenDoor, CarAlarmState.OpenAndLocked) },
                 { new Transition(CarAlarmState.ClosedAndLocked, Action.Tick20, CarAlarmState.Armed) },
 
                 { new Transition(CarAlarmState.Armed, Action.UnlockWithPinCorrect, CarAlarmState.ClosedAndUnlocked) },
                 { new Transition(CarAlarmState.Armed, Action.UnlockWithPinWrong, CarAlarmState.Armed, CarAlarmState.FlashAndSound) },
-                { new Transition(CarAlarmState.Armed, Action.Open, CarAlarmState.FlashAndSound) },
+                { new Transition(CarAlarmState.Armed, Action.OpenDoor, CarAlarmState.FlashAndSound) },
 
                 { new Transition(CarAlarmState.FlashAndSound, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.FlashAndSound, Action.UnlockWithPinWrong, CarAlarmState.FlashAndSound) },
@@ -56,7 +57,7 @@ namespace FsCheckCarAlarm.Test.Specification
                 { new Transition(CarAlarmState.Flash, Action.UnlockWithPinWrong, CarAlarmState.Flash) },
                 { new Transition(CarAlarmState.Flash, Action.Tick300, CarAlarmState.SilentAndOpen) },
 
-                { new Transition(CarAlarmState.SilentAndOpen, Action.Close, CarAlarmState.Armed) },
+                { new Transition(CarAlarmState.SilentAndOpen, Action.CloseDoor, CarAlarmState.SilentAndOpen, CarAlarmState.Armed) },
                 { new Transition(CarAlarmState.SilentAndOpen, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.SilentAndOpen, Action.UnlockWithPinWrong, CarAlarmState.SilentAndOpen) },
 
@@ -86,7 +87,7 @@ namespace FsCheckCarAlarm.Test.Specification
                     if (action == Action.UnlockWithPinWrong && transition.From == CarAlarmState.Armed)
                     {
                         unlockAttempts++;
-                        if (unlockAttempts >= 3)
+                        if (unlockAttempts == 3)
                         {
                             unlockAttempts = 0;
                             Debug.Assert(transition.ConditionalTo.HasValue, $"transition.ConditionalTo should have a value from={transition.From}, action={action}, to={transition.ConditionalTo}, conditionalTo={transition.ConditionalTo}, attempts={unlockAttempts}");
@@ -103,10 +104,23 @@ namespace FsCheckCarAlarm.Test.Specification
                     else if (action == Action.SetPinWrong)
                     {
                         pinChangeAttempts++;
-                        if (pinChangeAttempts >= 3)
+                        if (pinChangeAttempts == 3)
                         {
                             pinChangeAttempts = 0;
                             Debug.Assert(transition.ConditionalTo.HasValue, $"transition.ConditionalTo should have a value from={transition.From}, action={action}, to={transition.ConditionalTo}, conditionalTo={transition.ConditionalTo}, attempts={pinChangeAttempts}");
+                            state = transition.ConditionalTo.Value;
+                        }
+                    }
+                    else if (action == Action.OpenDoor)
+                    {
+                        closedDoors--;
+                    }
+                    else if (action == Action.CloseDoor)
+                    {
+                        closedDoors++;
+                        if (closedDoors == 4)
+                        {
+                            Debug.Assert(transition.ConditionalTo.HasValue, $"transition.ConditionalTo should have a value from={transition.From}, action={action}, to={transition.ConditionalTo}, conditionalTo={transition.ConditionalTo}, closedDoors={closedDoors}");
                             state = transition.ConditionalTo.Value;
                         }
                     }
