@@ -23,6 +23,13 @@ namespace FsCheckCarAlarm.Test.Specification
             }
         }
 
+        private string pin;
+
+        public string Pin
+        {
+            get { return pin; }
+        }
+
         //public CarAlarmState State { get; private set; }
 
         private Dictionary<Tuple<CarAlarmState, Action>, CarAlarmState> transitions;
@@ -31,6 +38,8 @@ namespace FsCheckCarAlarm.Test.Specification
         {
             this.uuid = Guid.NewGuid().ToString();
             this.state = CarAlarmState.OpenAndUnlocked;
+            this.pin = "1234";
+
             Console.WriteLine($"new model ({this.state}, {this.uuid})");
             this.transitions = new Dictionary<Tuple<CarAlarmState, Action>, CarAlarmState>()
             {
@@ -50,7 +59,10 @@ namespace FsCheckCarAlarm.Test.Specification
                 { Tuple.Create(CarAlarmState.Flash, Action.Unlock), CarAlarmState.OpenAndUnlocked },
                 { Tuple.Create(CarAlarmState.Flash, Action.Tick300), CarAlarmState.SilentAndOpen },
                 { Tuple.Create(CarAlarmState.SilentAndOpen, Action.Close), CarAlarmState.Armed },
-                { Tuple.Create(CarAlarmState.SilentAndOpen, Action.Unlock), CarAlarmState.OpenAndUnlocked }
+                { Tuple.Create(CarAlarmState.SilentAndOpen, Action.Unlock), CarAlarmState.OpenAndUnlocked },
+                // setPinCode requirements
+                { Tuple.Create(CarAlarmState.ClosedAndUnlocked, Action.SetPinCode), CarAlarmState.ClosedAndUnlocked },
+                { Tuple.Create(CarAlarmState.OpenAndUnlocked, Action.SetPinCode), CarAlarmState.OpenAndUnlocked },
             };
         }
 
@@ -64,12 +76,15 @@ namespace FsCheckCarAlarm.Test.Specification
             }
         }
 
-        public void MakeTransition(Action action)
+        public void MakeTransition(Action action, string newPin)
         {
             Console.WriteLine($"MakeTransition ({action}, {this.uuid})");
             CarAlarmState newState;
             if (transitions.TryGetValue(Tuple.Create(this.state, action), out newState))
             {
+                if (action == Action.SetPinCode)
+                    this.pin = newPin;
+
                 this.state = newState;
             }
         }

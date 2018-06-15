@@ -18,7 +18,7 @@ namespace FsCheckCarAlarm.Test.Specification
             this.carAlarm = new CarAlarm();
         }
 
-        public void ExecuteAction(Action action)
+        public void ExecuteAction(Action action, string modelPin, string newPin)
         {
             switch (action)
             {
@@ -40,16 +40,27 @@ namespace FsCheckCarAlarm.Test.Specification
                         CallSUTMethod("Tick");
                     }
                     break;
+                case Action.Unlock:
+                    CallSUTMethod(action.ToString(), new[] { modelPin });
+                    break;
+                case Action.SetPinCode:
+                    CallSUTMethod(action.ToString(), new[] { modelPin, newPin });
+                    break;
                 default:
                     CallSUTMethod(action.ToString());
                     break;
             }
         }
 
-        private void CallSUTMethod(string name)
+        private void CallSUTMethod(string name, object[] parameters)
         {
             MethodInfo methodInfo = carAlarm.GetType().GetMethod(name);
-            methodInfo.Invoke(this.carAlarm, null);
+            methodInfo.Invoke(this.carAlarm, parameters);
+        }
+
+        private void CallSUTMethod(string name)
+        {
+            CallSUTMethod(name, null);
         }
     }
 }

@@ -10,10 +10,35 @@ namespace FsCheckCarAlarm
     {
         private CarAlarmState state = CarAlarmState.OpenAndUnlocked;
         private int ticks = 0;
+        private string pin = "1234";
+        private int pinChangeAttempts = 0;
+        private int unlockAttempts = 0;
 
         public CarAlarmState State
         {
             get { return state; }
+        }
+
+        public void SetPinCode(string oldPin, string newPin)
+        {
+            if (state == CarAlarmState.ClosedAndUnlocked || state == CarAlarmState.OpenAndUnlocked)
+            {
+                if (oldPin.Equals(pin))
+                {
+                    pin = newPin;
+                    pinChangeAttempts = 0;
+                    Console.WriteLine("newPinSet");
+                }
+                else
+                {
+                    pinChangeAttempts++;
+                    if (pinChangeAttempts == 3)
+                    {
+                        pinChangeAttempts = 0;
+                        ChangeState(state, CarAlarmState.FlashAndSound);
+                    }
+                }
+            }
         }
 
         public void Open()
@@ -61,28 +86,44 @@ namespace FsCheckCarAlarm
             }
         }
 
-        public void Unlock()
+        public void Unlock(string pin)
         {
-            switch (state)
+            if (pin.Equals(this.pin))
             {
-                case CarAlarmState.OpenAndLocked:
-                    ChangeState(CarAlarmState.OpenAndLocked, CarAlarmState.OpenAndUnlocked);
-                    break;
-                case CarAlarmState.ClosedAndLocked:
-                    ChangeState(CarAlarmState.ClosedAndLocked, CarAlarmState.ClosedAndUnlocked);
-                    break;
-                case CarAlarmState.Armed:
-                    ChangeState(CarAlarmState.Armed, CarAlarmState.ClosedAndUnlocked); 
-                    break;
-                case CarAlarmState.SilentAndOpen:
-                    ChangeState(CarAlarmState.SilentAndOpen, CarAlarmState.OpenAndUnlocked);
-                    break;
-                case CarAlarmState.FlashAndSound:
-                    ChangeState(CarAlarmState.FlashAndSound, CarAlarmState.OpenAndUnlocked);
-                    break;
-                case CarAlarmState.Flash:
-                    ChangeState(CarAlarmState.Flash, CarAlarmState.OpenAndUnlocked);
-                    break;
+                unlockAttempts = 0;
+                switch (state)
+                {
+                    case CarAlarmState.OpenAndLocked:
+                        ChangeState(CarAlarmState.OpenAndLocked, CarAlarmState.OpenAndUnlocked);
+                        break;
+                    case CarAlarmState.ClosedAndLocked:
+                        ChangeState(CarAlarmState.ClosedAndLocked, CarAlarmState.ClosedAndUnlocked);
+                        break;
+                    case CarAlarmState.Armed:
+                        ChangeState(CarAlarmState.Armed, CarAlarmState.ClosedAndUnlocked);
+                        break;
+                    case CarAlarmState.SilentAndOpen:
+                        ChangeState(CarAlarmState.SilentAndOpen, CarAlarmState.OpenAndUnlocked);
+                        break;
+                    case CarAlarmState.FlashAndSound:
+                        ChangeState(CarAlarmState.FlashAndSound, CarAlarmState.OpenAndUnlocked);
+                        break;
+                    case CarAlarmState.Flash:
+                        ChangeState(CarAlarmState.Flash, CarAlarmState.OpenAndUnlocked);
+                        break;
+                }
+            }
+            else
+            {
+                if (state == CarAlarmState.Armed)
+                {
+                    unlockAttempts++;
+                    if (unlockAttempts == 3)
+                    {
+                        unlockAttempts = 0;
+                        ChangeState(state, CarAlarmState.FlashAndSound);
+                    }
+                }
             }
         }
 

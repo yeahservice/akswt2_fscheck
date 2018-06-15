@@ -14,6 +14,7 @@ namespace FsCheckCarAlarm.Test.Specification
         Unlock,
         Tick20,
         Tick30,
-        Tick300
+        Tick300,
+        SetPinCode
     }
 }
