@@ -11,10 +11,12 @@ namespace FsCheckCarAlarm.Test.Specification
         Close,
         Open,
         Lock,
-        Unlock,
+        UnlockWithPinCorrect,
+        UnlockWithPinWrong,
         Tick20,
         Tick30,
         Tick300,
-        SetPinCode
+        SetPinCorrect,
+        SetPinWrong
     }
 }

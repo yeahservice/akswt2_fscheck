@@ -58,13 +58,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="PropertyBasedTest.cs" />
+    <Compile Include="QuickCheckTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Specification\Action.cs" />
     <Compile Include="Specification\CarAlarmSpec.cs" />
     <Compile Include="Specification\DynamicCommand.cs" />
     <Compile Include="Specification\Model.cs" />
     <Compile Include="Specification\SUT.cs" />
+    <Compile Include="Specification\Transition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

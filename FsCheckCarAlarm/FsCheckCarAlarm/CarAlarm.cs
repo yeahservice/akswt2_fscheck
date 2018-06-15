@@ -27,7 +27,7 @@ namespace FsCheckCarAlarm
                 {
                     pin = newPin;
                     pinChangeAttempts = 0;
-                    Console.WriteLine("newPinSet");
+                    // Console.WriteLine("newPinSet");
                 }
                 else
                 {
@@ -118,7 +118,7 @@ namespace FsCheckCarAlarm
                 if (state == CarAlarmState.Armed)
                 {
                     unlockAttempts++;
-                    if (unlockAttempts == 3)
+                    if (unlockAttempts >= 3)
                     {
                         unlockAttempts = 0;
                         ChangeState(state, CarAlarmState.FlashAndSound);

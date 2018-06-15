@@ -1,91 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace FsCheckCarAlarm.Test.Specification
 {
     public class Model
     {
-        private string uuid;
-
-        public string Uuid
-        {
-            get { return uuid; }
-        }
-
+        private HashSet<Transition> transitions;
         private CarAlarmState state;
+        private string pin;
+        private int unlockAttempts = 0;
+        private int pinChangeAttempts = 0;
 
         public CarAlarmState State
         {
-            get
-            {
-                //Console.WriteLine($"model state get ({this.state})");
-                return state;
-            }
+            get { return state; }
         }
-
-        private string pin;
 
         public string Pin
         {
             get { return pin; }
         }
 
-        //public CarAlarmState State { get; private set; }
-
-        private Dictionary<Tuple<CarAlarmState, Action>, CarAlarmState> transitions;
-
         public Model()
         {
-            this.uuid = Guid.NewGuid().ToString();
             this.state = CarAlarmState.OpenAndUnlocked;
             this.pin = "1234";
 
-            Console.WriteLine($"new model ({this.state}, {this.uuid})");
-            this.transitions = new Dictionary<Tuple<CarAlarmState, Action>, CarAlarmState>()
+            this.transitions = new HashSet<Transition>()
             {
-                { Tuple.Create(CarAlarmState.OpenAndUnlocked, Action.Close), CarAlarmState.ClosedAndUnlocked },
-                { Tuple.Create(CarAlarmState.OpenAndUnlocked, Action.Lock), CarAlarmState.OpenAndLocked },
-                { Tuple.Create(CarAlarmState.OpenAndLocked, Action.Unlock), CarAlarmState.OpenAndUnlocked },
-                { Tuple.Create(CarAlarmState.OpenAndLocked, Action.Close), CarAlarmState.ClosedAndLocked },
-                { Tuple.Create(CarAlarmState.ClosedAndUnlocked, Action.Open), CarAlarmState.OpenAndUnlocked },
-                { Tuple.Create(CarAlarmState.ClosedAndUnlocked, Action.Lock), CarAlarmState.ClosedAndLocked },
-                { Tuple.Create(CarAlarmState.ClosedAndLocked, Action.Unlock), CarAlarmState.ClosedAndUnlocked },
-                { Tuple.Create(CarAlarmState.ClosedAndLocked, Action.Open), CarAlarmState.OpenAndLocked },
-                { Tuple.Create(CarAlarmState.ClosedAndLocked, Action.Tick20), CarAlarmState.Armed },
-                { Tuple.Create(CarAlarmState.Armed, Action.Unlock), CarAlarmState.ClosedAndUnlocked },
-                { Tuple.Create(CarAlarmState.Armed, Action.Open), CarAlarmState.FlashAndSound },
-                { Tuple.Create(CarAlarmState.FlashAndSound, Action.Unlock), CarAlarmState.OpenAndUnlocked },
-                { Tuple.Create(CarAlarmState.FlashAndSound, Action.Tick30), CarAlarmState.Flash },
-                { Tuple.Create(CarAlarmState.Flash, Action.Unlock), CarAlarmState.OpenAndUnlocked },
-                { Tuple.Create(CarAlarmState.Flash, Action.Tick300), CarAlarmState.SilentAndOpen },
-                { Tuple.Create(CarAlarmState.SilentAndOpen, Action.Close), CarAlarmState.Armed },
-                { Tuple.Create(CarAlarmState.SilentAndOpen, Action.Unlock), CarAlarmState.OpenAndUnlocked },
-                // setPinCode requirements
-                { Tuple.Create(CarAlarmState.ClosedAndUnlocked, Action.SetPinCode), CarAlarmState.ClosedAndUnlocked },
-                { Tuple.Create(CarAlarmState.OpenAndUnlocked, Action.SetPinCode), CarAlarmState.OpenAndUnlocked },
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.Close, CarAlarmState.ClosedAndUnlocked) },
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.Lock, CarAlarmState.OpenAndLocked) },
+
+                { new Transition(CarAlarmState.OpenAndLocked, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
+                { new Transition(CarAlarmState.OpenAndLocked, Action.UnlockWithPinWrong, CarAlarmState.OpenAndLocked) },
+                { new Transition(CarAlarmState.OpenAndLocked, Action.Close, CarAlarmState.ClosedAndLocked) },
+
+                { new Transition(CarAlarmState.ClosedAndUnlocked, Action.Open, CarAlarmState.OpenAndUnlocked) },
+                { new Transition(CarAlarmState.ClosedAndUnlocked, Action.Lock, CarAlarmState.ClosedAndLocked) },
+
+                { new Transition(CarAlarmState.ClosedAndLocked, Action.UnlockWithPinCorrect, CarAlarmState.ClosedAndUnlocked) },
+                { new Transition(CarAlarmState.ClosedAndLocked, Action.UnlockWithPinWrong, CarAlarmState.ClosedAndLocked) },
+                { new Transition(CarAlarmState.ClosedAndLocked, Action.Open, CarAlarmState.OpenAndLocked) },
+                { new Transition(CarAlarmState.ClosedAndLocked, Action.Tick20, CarAlarmState.Armed) },
+
+                { new Transition(CarAlarmState.Armed, Action.UnlockWithPinCorrect, CarAlarmState.ClosedAndUnlocked) },
+                { new Transition(CarAlarmState.Armed, Action.UnlockWithPinWrong, CarAlarmState.Armed, CarAlarmState.FlashAndSound) },
+                { new Transition(CarAlarmState.Armed, Action.Open, CarAlarmState.FlashAndSound) },
+
+                { new Transition(CarAlarmState.FlashAndSound, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
+                { new Transition(CarAlarmState.FlashAndSound, Action.UnlockWithPinWrong, CarAlarmState.FlashAndSound) },
+                { new Transition(CarAlarmState.FlashAndSound, Action.Tick30, CarAlarmState.Flash) },
+
+                { new Transition(CarAlarmState.Flash, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
+                { new Transition(CarAlarmState.Flash, Action.UnlockWithPinWrong, CarAlarmState.Flash) },
+                { new Transition(CarAlarmState.Flash, Action.Tick300, CarAlarmState.SilentAndOpen) },
+
+                { new Transition(CarAlarmState.SilentAndOpen, Action.Close, CarAlarmState.Armed) },
+                { new Transition(CarAlarmState.SilentAndOpen, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
+                { new Transition(CarAlarmState.SilentAndOpen, Action.UnlockWithPinWrong, CarAlarmState.SilentAndOpen) },
+
+                // setPinCode
+                { new Transition(CarAlarmState.ClosedAndUnlocked, Action.SetPinCorrect, CarAlarmState.ClosedAndUnlocked) },
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.SetPinWrong, CarAlarmState.OpenAndUnlocked, CarAlarmState.FlashAndSound) }
             };
         }
 
         public IEnumerable<Action> GetPossibleActions()
         {
-            //Console.WriteLine($"GetPossibleActions ({this.uuid})");
-            foreach (Tuple<CarAlarmState, Action> keys in transitions.Keys)
+            foreach (Transition transition in transitions)
             {
-                if (keys.Item1 == this.state)
-                    yield return keys.Item2;
+                if (transition.From == state)
+                    yield return transition.Action;
             }
         }
 
         public void MakeTransition(Action action, string newPin)
         {
-            Console.WriteLine($"MakeTransition ({action}, {this.uuid})");
-            CarAlarmState newState;
-            if (transitions.TryGetValue(Tuple.Create(this.state, action), out newState))
+            foreach (Transition transition in transitions)
             {
-                if (action == Action.SetPinCode)
-                    this.pin = newPin;
+                if (transition.From == state && transition.Action == action)
+                {
+                    this.state = transition.To;
 
-                this.state = newState;
+                    if (action == Action.UnlockWithPinWrong && transition.From == CarAlarmState.Armed)
+                    {
+                        unlockAttempts++;
+                        if (unlockAttempts >= 3)
+                        {
+                            unlockAttempts = 0;
+                            Debug.Assert(transition.ConditionalTo.HasValue, $"transition.ConditionalTo should have a value from={transition.From}, action={action}, to={transition.ConditionalTo}, conditionalTo={transition.ConditionalTo}, attempts={unlockAttempts}");
+                            state = transition.ConditionalTo.Value;
+                        }
+                    }
+                    else if (action == Action.UnlockWithPinCorrect)
+                        unlockAttempts = 0;
+                    else if (action == Action.SetPinCorrect)
+                    {
+                        pinChangeAttempts = 0;
+                        this.pin = newPin;
+                    }
+                    else if (action == Action.SetPinWrong)
+                    {
+                        pinChangeAttempts++;
+                        if (pinChangeAttempts >= 3)
+                        {
+                            pinChangeAttempts = 0;
+                            Debug.Assert(transition.ConditionalTo.HasValue, $"transition.ConditionalTo should have a value from={transition.From}, action={action}, to={transition.ConditionalTo}, conditionalTo={transition.ConditionalTo}, attempts={pinChangeAttempts}");
+                            state = transition.ConditionalTo.Value;
+                        }
+                    }
+                }
             }
         }
     }

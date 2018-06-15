@@ -11,37 +11,34 @@ namespace FsCheckCarAlarm.Test.Specification
     {
         private Action action;
         private string newPin;
-        private string modelPin;
+        private string pin;
 
         public DynamicCommand(Action action) : this(action, null, null) { }
 
-        public DynamicCommand(Action action, string modelPin) : this(action, modelPin, null) { }
+        public DynamicCommand(Action action, string pin) : this(action, pin, null) { }
 
-        public DynamicCommand(Action action, string modelPin, string newPin)
+        public DynamicCommand(Action action, string pin, string newPin)
         {
-            //Console.WriteLine($"action={action.ToString()}");
             this.action = action;
             this.newPin = newPin;
-            this.modelPin = modelPin;
+            this.pin = pin;
         }
 
         public override Model RunModel(Model model)
         {
-            //Console.WriteLine($"RunModel model=({model.State}, {model.Uuid})");
             model.MakeTransition(this.action, newPin);
             return model;
         }
 
         public override SUT RunActual(SUT sut)
         {
-            //Console.WriteLine($"RunActual");
-            sut.ExecuteAction(this.action, modelPin, newPin);
+            sut.ExecuteAction(this.action, pin, newPin);
             return sut;
         }
 
         public override Property Post(SUT sut, Model model)
         {
-            Console.WriteLine($"Post sut=({sut.State}) model=({model.State}, {model.Uuid})");
+            Console.WriteLine($"[{action}] sut=[{sut.State}] model=[{model.State}]");
             return (sut.State == model.State).ToProperty();
         }
 
