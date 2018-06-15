@@ -27,7 +27,7 @@ namespace FsCheckCarAlarm
                     ChangeState(CarAlarmState.ClosedAndLocked, CarAlarmState.OpenAndLocked);
                     break;
                 case CarAlarmState.Armed:
-                    ChangeState(CarAlarmState.Armed, CarAlarmState.Alarm);
+                    ChangeState(CarAlarmState.Armed, CarAlarmState.FlashAndSound);
                     break;
             }
         }
@@ -77,8 +77,11 @@ namespace FsCheckCarAlarm
                 case CarAlarmState.SilentAndOpen:
                     ChangeState(CarAlarmState.SilentAndOpen, CarAlarmState.OpenAndUnlocked);
                     break;
-                case CarAlarmState.Alarm:
-                    ChangeState(CarAlarmState.Alarm, CarAlarmState.OpenAndUnlocked);
+                case CarAlarmState.FlashAndSound:
+                    ChangeState(CarAlarmState.FlashAndSound, CarAlarmState.OpenAndUnlocked);
+                    break;
+                case CarAlarmState.Flash:
+                    ChangeState(CarAlarmState.Flash, CarAlarmState.OpenAndUnlocked);
                     break;
             }
         }
@@ -92,7 +95,7 @@ namespace FsCheckCarAlarm
                 case CarAlarmState.Armed:
                     Console.WriteLine("Armed");
                     break;
-                case CarAlarmState.Alarm:
+                case CarAlarmState.FlashAndSound:
                     Console.WriteLine("Activate Alarms");
                     break;
             }
@@ -102,7 +105,8 @@ namespace FsCheckCarAlarm
                 case CarAlarmState.Armed:
                     Console.WriteLine("Unarmed");
                     break;
-                case CarAlarmState.Alarm:
+                case CarAlarmState.FlashAndSound:
+                case CarAlarmState.Flash:
                     Console.WriteLine("Deactivate Alarms");
                     break;
             }*/
@@ -110,7 +114,7 @@ namespace FsCheckCarAlarm
 
         public void Tick()
         {
-            if (state == CarAlarmState.ClosedAndLocked || state == CarAlarmState.Alarm)
+            if (state == CarAlarmState.ClosedAndLocked || state == CarAlarmState.FlashAndSound || state == CarAlarmState.Flash)
                 ticks = ticks + 10;
 
             if (state == CarAlarmState.ClosedAndLocked && ticks >= 20)
@@ -119,9 +123,15 @@ namespace FsCheckCarAlarm
                 ticks = 0;
             }
 
-            if (state == CarAlarmState.Alarm && ticks >= 300)
+            if (state == CarAlarmState.FlashAndSound && ticks >= 30)
             {
-                ChangeState(CarAlarmState.Alarm, CarAlarmState.SilentAndOpen);
+                ChangeState(CarAlarmState.FlashAndSound, CarAlarmState.Flash);
+                ticks = 0;
+            }
+
+            if (state == CarAlarmState.Flash && ticks >= 300)
+            {
+                ChangeState(CarAlarmState.Flash, CarAlarmState.SilentAndOpen);
                 ticks = 0;
             }
         }

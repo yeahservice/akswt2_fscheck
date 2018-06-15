@@ -28,6 +28,12 @@ namespace FsCheckCarAlarm.Test.Specification
                         CallSUTMethod("Tick");
                     }
                     break;
+                case Action.Tick30:
+                    for (int i = 0; i < 30; ++i)
+                    {
+                        CallSUTMethod("Tick");
+                    }
+                    break;
                 case Action.Tick300:
                     for (int i = 0; i < 300; ++i)
                     {

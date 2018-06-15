@@ -14,6 +14,7 @@ namespace FsCheckCarAlarm
         ClosedAndLocked,
         Armed,
         SilentAndOpen,
-        Alarm
+        FlashAndSound,
+        Flash
     }
 }

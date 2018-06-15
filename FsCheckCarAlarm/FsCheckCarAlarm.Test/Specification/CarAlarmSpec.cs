@@ -26,6 +26,7 @@ namespace FsCheckCarAlarm.Test
 
         public Gen<Command<SUT, Model>> Next(Model model)
         {
+            System.Console.WriteLine($"Next ({model.Uuid})");
             IEnumerable<Action> actions = model.GetPossibleActions();
             List<Command<SUT, Model>> commands = new List<Command<SUT, Model>>();
             commands.AddRange(actions.Select(a => new DynamicCommand(a)));
