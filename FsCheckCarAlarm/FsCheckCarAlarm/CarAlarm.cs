@@ -44,7 +44,8 @@ namespace FsCheckCarAlarm
 
         public void OpenDoor()
         {
-            closedDoors--;
+            if (closedDoors > 0)
+                closedDoors--;
 
             if (closedDoors < 4)
             {
@@ -65,21 +66,24 @@ namespace FsCheckCarAlarm
 
         public void CloseDoor()
         {
-            closedDoors++;
-
-            if (closedDoors == 4)
+            if (closedDoors < 4)
             {
-                switch (state)
+                closedDoors++;
+
+                if (closedDoors == 4)
                 {
-                    case CarAlarmState.OpenAndUnlocked:
-                        ChangeState(CarAlarmState.OpenAndUnlocked, CarAlarmState.ClosedAndUnlocked);
-                        break;
-                    case CarAlarmState.OpenAndLocked:
-                        ChangeState(CarAlarmState.OpenAndLocked, CarAlarmState.ClosedAndLocked);
-                        break;
-                    case CarAlarmState.SilentAndOpen:
-                        ChangeState(CarAlarmState.SilentAndOpen, CarAlarmState.Armed);
-                        break;
+                    switch (state)
+                    {
+                        case CarAlarmState.OpenAndUnlocked:
+                            ChangeState(CarAlarmState.OpenAndUnlocked, CarAlarmState.ClosedAndUnlocked);
+                            break;
+                        case CarAlarmState.OpenAndLocked:
+                            ChangeState(CarAlarmState.OpenAndLocked, CarAlarmState.ClosedAndLocked);
+                            break;
+                        case CarAlarmState.SilentAndOpen:
+                            ChangeState(CarAlarmState.SilentAndOpen, CarAlarmState.Armed);
+                            break;
+                    }
                 }
             }
         }

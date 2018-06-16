@@ -32,10 +32,12 @@ namespace FsCheckCarAlarm.Test.Specification
             {
                 { new Transition(CarAlarmState.OpenAndUnlocked, Action.CloseDoor, CarAlarmState.OpenAndUnlocked, CarAlarmState.ClosedAndUnlocked) },
                 { new Transition(CarAlarmState.OpenAndUnlocked, Action.Lock, CarAlarmState.OpenAndLocked) },
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.OpenDoor, null, CarAlarmState.OpenAndUnlocked) },
 
                 { new Transition(CarAlarmState.OpenAndLocked, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.OpenAndLocked, Action.UnlockWithPinWrong, CarAlarmState.OpenAndLocked) },
                 { new Transition(CarAlarmState.OpenAndLocked, Action.CloseDoor, CarAlarmState.OpenAndLocked, CarAlarmState.ClosedAndLocked) },
+                { new Transition(CarAlarmState.OpenAndLocked, Action.OpenDoor, null, CarAlarmState.OpenAndLocked) },
 
                 { new Transition(CarAlarmState.ClosedAndUnlocked, Action.OpenDoor, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.ClosedAndUnlocked, Action.Lock, CarAlarmState.ClosedAndLocked) },
@@ -52,14 +54,17 @@ namespace FsCheckCarAlarm.Test.Specification
                 { new Transition(CarAlarmState.FlashAndSound, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.FlashAndSound, Action.UnlockWithPinWrong, CarAlarmState.FlashAndSound) },
                 { new Transition(CarAlarmState.FlashAndSound, Action.Tick30, CarAlarmState.Flash) },
+                { new Transition(CarAlarmState.FlashAndSound, Action.OpenDoor, null, CarAlarmState.FlashAndSound) },
 
                 { new Transition(CarAlarmState.Flash, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.Flash, Action.UnlockWithPinWrong, CarAlarmState.Flash) },
                 { new Transition(CarAlarmState.Flash, Action.Tick300, CarAlarmState.SilentAndOpen) },
+                { new Transition(CarAlarmState.Flash, Action.OpenDoor, null, CarAlarmState.Flash) },
 
                 { new Transition(CarAlarmState.SilentAndOpen, Action.CloseDoor, CarAlarmState.SilentAndOpen, CarAlarmState.Armed) },
                 { new Transition(CarAlarmState.SilentAndOpen, Action.UnlockWithPinCorrect, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.SilentAndOpen, Action.UnlockWithPinWrong, CarAlarmState.SilentAndOpen) },
+                { new Transition(CarAlarmState.SilentAndOpen, Action.OpenDoor, null, CarAlarmState.SilentAndOpen) },
 
                 // setPinCode
                 { new Transition(CarAlarmState.ClosedAndUnlocked, Action.SetPinCorrect, CarAlarmState.ClosedAndUnlocked) },
@@ -71,7 +76,7 @@ namespace FsCheckCarAlarm.Test.Specification
         {
             foreach (Transition transition in transitions)
             {
-                if (transition.From == state)
+                if (transition.From == state && (transition.Action != Action.OpenDoor || closedDoors > 0))
                     yield return transition.Action;
             }
         }
@@ -82,7 +87,8 @@ namespace FsCheckCarAlarm.Test.Specification
             {
                 if (transition.From == state && transition.Action == action)
                 {
-                    this.state = transition.To;
+                    if (transition.To.HasValue)
+                        state = transition.To.Value;
 
                     if (action == Action.UnlockWithPinWrong && transition.From == CarAlarmState.Armed)
                     {
@@ -114,6 +120,12 @@ namespace FsCheckCarAlarm.Test.Specification
                     else if (action == Action.OpenDoor)
                     {
                         closedDoors--;
+
+                        if (!transition.To.HasValue)
+                        {
+                            Debug.Assert(transition.ConditionalTo.HasValue, $"transition.ConditionalTo should have a value from={transition.From}, action={action}, to={transition.ConditionalTo}, conditionalTo={transition.ConditionalTo}, closedDoors={closedDoors}");
+                            state = transition.ConditionalTo.Value;
+                        }
                     }
                     else if (action == Action.CloseDoor)
                     {
@@ -124,6 +136,8 @@ namespace FsCheckCarAlarm.Test.Specification
                             state = transition.ConditionalTo.Value;
                         }
                     }
+
+                    break;
                 }
             }
         }

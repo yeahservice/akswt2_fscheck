@@ -13,7 +13,7 @@ namespace FsCheckCarAlarm.Test
             Configuration config = Configuration.VerboseThrowOnFailure;
             config.MaxNbOfTest = 1;
 
-            for (int i = 1; i <= 1000; ++i)
+            for (int i = 1; i <= 100; ++i)
             {
                 config.StartSize = i;
                 config.EndSize = i;

@@ -10,7 +10,7 @@ namespace FsCheckCarAlarm.Test.Specification
     {
         private CarAlarmState from;
         private Action action;
-        private CarAlarmState to;
+        private CarAlarmState? to;
         private CarAlarmState? conditionalTo;
 
         public CarAlarmState? ConditionalTo
@@ -21,7 +21,7 @@ namespace FsCheckCarAlarm.Test.Specification
             }
         }
 
-        public CarAlarmState To
+        public CarAlarmState? To
         {
             get
             {
@@ -47,7 +47,7 @@ namespace FsCheckCarAlarm.Test.Specification
 
         public Transition(CarAlarmState from, Action action, CarAlarmState to) : this(from, action, to, null) { }
 
-        public Transition (CarAlarmState from, Action action, CarAlarmState to, CarAlarmState? conditionalTo)
+        public Transition (CarAlarmState from, Action action, CarAlarmState? to, CarAlarmState? conditionalTo)
         {
             this.from = from;
             this.action = action;
