@@ -5,12 +5,10 @@ namespace FsCheckCarAlarm.Test.Specification
     public class SUT
     {
         private CarAlarm carAlarm;
+
         public CarAlarmState State
         {
-            get
-            {
-                return this.carAlarm.State;
-            }
+            get { return carAlarm.State; }
         }
 
         public bool UnlockedTrunk
@@ -20,7 +18,7 @@ namespace FsCheckCarAlarm.Test.Specification
 
         public SUT()
         {
-            this.carAlarm = new CarAlarm();
+            carAlarm = new CarAlarm();
         }
 
         public void ExecuteAction(Action action, string pin, string newPin)
@@ -28,22 +26,13 @@ namespace FsCheckCarAlarm.Test.Specification
             switch (action)
             {
                 case Action.Tick20:
-                    for (int i = 0; i < 20; ++i)
-                    {
-                        CallSUTMethod("Tick");
-                    }
+                    CallTickMethod(20);
                     break;
                 case Action.Tick30:
-                    for (int i = 0; i < 30; ++i)
-                    {
-                        CallSUTMethod("Tick");
-                    }
+                    CallTickMethod(30);
                     break;
                 case Action.Tick300:
-                    for (int i = 0; i < 300; ++i)
-                    {
-                        CallSUTMethod("Tick");
-                    }
+                    CallTickMethod(300);
                     break;
                 case Action.UnlockWithPinCorrect:
                 case Action.UnlockWithPinWrong:
@@ -59,15 +48,23 @@ namespace FsCheckCarAlarm.Test.Specification
             }
         }
 
-        private void CallSUTMethod(string name, object[] parameters)
+        private void CallTickMethod(int times)
         {
-            MethodInfo methodInfo = carAlarm.GetType().GetMethod(name);
-            methodInfo.Invoke(this.carAlarm, parameters);
+            for (int i = 0; i < times; ++i)
+            {
+                CallSUTMethod("Tick");
+            }
         }
 
         private void CallSUTMethod(string name)
         {
             CallSUTMethod(name, null);
+        }
+
+        private void CallSUTMethod(string name, object[] parameters)
+        {
+            MethodInfo methodInfo = carAlarm.GetType().GetMethod(name);
+            methodInfo.Invoke(carAlarm, parameters);
         }
     }
 }
