@@ -36,9 +36,9 @@ namespace FsCheckCarAlarm.Test
                 else if (action == Action.UnlockWithPinWrong)
                     commands.Add(new DynamicCommand(action, model.Pin + "1"));
                 else if (action == Action.SetPinCorrect)
-                    commands.Add(new DynamicCommand(action, model.Pin, "2132"));
+                    commands.Add(new DynamicCommand(action, model.Pin, model.GeneratePin()));
                 else if (action == Action.SetPinWrong)
-                    commands.Add(new DynamicCommand(action, model.Pin + "1", "2132"));
+                    commands.Add(new DynamicCommand(action, model.Pin + "1", model.GeneratePin()));
                 else
                     commands.Add(new DynamicCommand(action));
             }

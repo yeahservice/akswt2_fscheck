@@ -14,17 +14,23 @@ namespace FsCheckCarAlarm
         private int pinChangeAttempts = 0;
         private int unlockAttempts = 0;
         private int closedDoors = 0;
+        private bool unlockedTrunk = true;
 
         public CarAlarmState State
         {
             get { return state; }
         }
 
+        public bool UnlockedTrunk
+        {
+            get { return unlockedTrunk; }
+        }
+
         public void SetPinCode(string oldPin, string newPin)
         {
             if (state == CarAlarmState.ClosedAndUnlocked || state == CarAlarmState.OpenAndUnlocked)
             {
-                if (oldPin.Equals(pin))
+                if (oldPin.Equals(pin) && IsFourDigitPin(newPin))
                 {
                     pin = newPin;
                     pinChangeAttempts = 0;
@@ -40,6 +46,11 @@ namespace FsCheckCarAlarm
                     }
                 }
             }
+        }
+
+        private bool IsFourDigitPin(string pin)
+        {
+            return (pin.Length == 4) && (pin.All(char.IsDigit));
         }
 
         public void OpenDoor()
@@ -142,6 +153,16 @@ namespace FsCheckCarAlarm
             }
         }
 
+        public void UnlockTrunk()
+        {
+            unlockedTrunk = true;
+        }
+
+        public void LockTrunk()
+        {
+            unlockedTrunk = false;
+        }
+
         private void ChangeState(CarAlarmState from, CarAlarmState to)
         {
             state = to;
@@ -171,7 +192,7 @@ namespace FsCheckCarAlarm
         public void Tick()
         {
             if (state == CarAlarmState.ClosedAndLocked || state == CarAlarmState.FlashAndSound || state == CarAlarmState.Flash)
-                ticks = ticks + 10;
+                ticks++;
 
             if (state == CarAlarmState.ClosedAndLocked && ticks >= 20)
             {

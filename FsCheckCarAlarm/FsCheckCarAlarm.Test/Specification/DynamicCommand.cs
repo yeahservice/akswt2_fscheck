@@ -38,8 +38,9 @@ namespace FsCheckCarAlarm.Test.Specification
 
         public override Property Post(SUT sut, Model model)
         {
-            Console.WriteLine($"[{action}] sut=[{sut.State}] model=[{model.State}]");
-            return (sut.State == model.State).ToProperty();
+            bool condition = (sut.State == model.State && sut.UnlockedTrunk == model.UnlockedTrunk);
+            Console.WriteLine($"[{action}] sut=[{sut.State}, {sut.UnlockedTrunk}] model=[{model.State}, {model.UnlockedTrunk}] --- [{condition}]");
+            return condition.ToProperty();
         }
 
         public override string ToString()

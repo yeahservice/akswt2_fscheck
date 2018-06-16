@@ -12,6 +12,9 @@ namespace FsCheckCarAlarm.Test.Specification
         private int unlockAttempts = 0;
         private int pinChangeAttempts = 0;
         private int closedDoors = 0;
+        private bool unlockedTrunk = true;
+
+        private Random random = new Random();
 
         public CarAlarmState State
         {
@@ -21,6 +24,11 @@ namespace FsCheckCarAlarm.Test.Specification
         public string Pin
         {
             get { return pin; }
+        }
+
+        public bool UnlockedTrunk
+        {
+            get { return unlockedTrunk; }
         }
 
         public Model()
@@ -68,7 +76,32 @@ namespace FsCheckCarAlarm.Test.Specification
 
                 // setPinCode
                 { new Transition(CarAlarmState.ClosedAndUnlocked, Action.SetPinCorrect, CarAlarmState.ClosedAndUnlocked) },
-                { new Transition(CarAlarmState.OpenAndUnlocked, Action.SetPinWrong, CarAlarmState.OpenAndUnlocked, CarAlarmState.FlashAndSound) }
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.SetPinWrong, CarAlarmState.OpenAndUnlocked, CarAlarmState.FlashAndSound) },
+
+                // unlock/lock trunk
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.LockTrunk, CarAlarmState.OpenAndUnlocked) },
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.UnlockTrunk, CarAlarmState.OpenAndUnlocked) },
+
+                { new Transition(CarAlarmState.OpenAndLocked, Action.LockTrunk, CarAlarmState.OpenAndLocked) },
+                { new Transition(CarAlarmState.OpenAndLocked, Action.UnlockTrunk, CarAlarmState.OpenAndLocked) },
+
+                { new Transition(CarAlarmState.ClosedAndUnlocked, Action.LockTrunk, CarAlarmState.ClosedAndUnlocked) },
+                { new Transition(CarAlarmState.ClosedAndUnlocked, Action.UnlockTrunk, CarAlarmState.ClosedAndUnlocked) },
+
+                { new Transition(CarAlarmState.ClosedAndLocked, Action.LockTrunk, CarAlarmState.ClosedAndLocked) },
+                { new Transition(CarAlarmState.ClosedAndLocked, Action.UnlockTrunk, CarAlarmState.ClosedAndLocked) },
+
+                { new Transition(CarAlarmState.Armed, Action.LockTrunk, CarAlarmState.Armed) },
+                { new Transition(CarAlarmState.Armed, Action.UnlockTrunk, CarAlarmState.Armed) },
+
+                { new Transition(CarAlarmState.FlashAndSound, Action.LockTrunk, CarAlarmState.FlashAndSound) },
+                { new Transition(CarAlarmState.FlashAndSound, Action.UnlockTrunk, CarAlarmState.FlashAndSound) },
+
+                { new Transition(CarAlarmState.Flash, Action.LockTrunk, CarAlarmState.Flash) },
+                { new Transition(CarAlarmState.Flash, Action.UnlockTrunk, CarAlarmState.Flash) },
+
+                { new Transition(CarAlarmState.SilentAndOpen, Action.LockTrunk, CarAlarmState.SilentAndOpen) },
+                { new Transition(CarAlarmState.SilentAndOpen, Action.UnlockTrunk, CarAlarmState.SilentAndOpen) },
             };
         }
 
@@ -76,9 +109,34 @@ namespace FsCheckCarAlarm.Test.Specification
         {
             foreach (Transition transition in transitions)
             {
-                if (transition.From == state && (transition.Action != Action.OpenDoor || closedDoors > 0))
-                    yield return transition.Action;
+                if (transition.From == state)
+                {
+                    switch (transition.Action)
+                    {
+                        case Action.OpenDoor:
+                            if (closedDoors > 0) yield return transition.Action;
+                            break;
+                        case Action.CloseDoor:
+                            if (closedDoors < 4) yield return transition.Action;
+                            break;
+                        case Action.UnlockTrunk:
+                            if (!unlockedTrunk) yield return transition.Action;
+                            break;
+                        case Action.LockTrunk:
+                            if (unlockedTrunk) yield return transition.Action;
+                            break;
+                        default:
+                            yield return transition.Action;
+                            break;
+                    }
+                }
             }
+        }
+
+        public string GeneratePin()
+        {
+            int randomNumber = random.Next(0, 10000);
+            return randomNumber.ToString("D4");
         }
 
         public void MakeTransition(Action action, string newPin)
@@ -136,6 +194,10 @@ namespace FsCheckCarAlarm.Test.Specification
                             state = transition.ConditionalTo.Value;
                         }
                     }
+                    else if (action == Action.UnlockTrunk)
+                        unlockedTrunk = true;
+                    else if (action == Action.LockTrunk)
+                        unlockedTrunk = false;
 
                     break;
                 }

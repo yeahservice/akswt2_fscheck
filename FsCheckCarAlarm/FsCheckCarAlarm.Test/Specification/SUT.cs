@@ -13,6 +13,11 @@ namespace FsCheckCarAlarm.Test.Specification
             }
         }
 
+        public bool UnlockedTrunk
+        {
+            get { return carAlarm.UnlockedTrunk; }
+        }
+
         public SUT()
         {
             this.carAlarm = new CarAlarm();
