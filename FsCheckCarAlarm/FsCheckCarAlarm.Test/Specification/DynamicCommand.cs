@@ -26,13 +26,13 @@ namespace FsCheckCarAlarm.Test.Specification
 
         public override Model RunModel(Model model)
         {
-            model.MakeTransition(this.action, newPin);
+            model.MakeTransition(action, newPin);
             return model;
         }
 
         public override SUT RunActual(SUT sut)
         {
-            sut.ExecuteAction(this.action, pin, newPin);
+            sut.ExecuteAction(action, pin, newPin);
             return sut;
         }
 
@@ -40,12 +40,13 @@ namespace FsCheckCarAlarm.Test.Specification
         {
             bool condition = (sut.State == model.State && sut.UnlockedTrunk == model.UnlockedTrunk);
             Console.WriteLine($"[{action}] sut=[{sut.State}, {sut.UnlockedTrunk}] model=[{model.State}, {model.UnlockedTrunk}] --- [{condition}]");
+
             return condition.ToProperty();
         }
 
         public override string ToString()
         {
-            return this.action.ToString();
+            return action.ToString();
         }
     }
 }
