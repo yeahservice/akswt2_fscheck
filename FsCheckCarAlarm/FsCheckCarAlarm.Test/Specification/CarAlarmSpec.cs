@@ -31,16 +31,24 @@ namespace FsCheckCarAlarm.Test
 
             foreach (Action action in actions)
             {
-                if (action == Action.UnlockWithPinCorrect)
-                    commands.Add(new DynamicCommand(action, model.Pin));
-                else if (action == Action.UnlockWithPinWrong)
-                    commands.Add(new DynamicCommand(action, model.Pin + "1"));
-                else if (action == Action.SetPinCorrect)
-                    commands.Add(new DynamicCommand(action, model.Pin, model.GeneratePin()));
-                else if (action == Action.SetPinWrong)
-                    commands.Add(new DynamicCommand(action, model.Pin + "1", model.GeneratePin()));
-                else
-                    commands.Add(new DynamicCommand(action));
+                switch (action)
+                {
+                    case Action.UnlockWithPinCorrect:
+                        commands.Add(new DynamicCommand(action, model.Pin));
+                        break;
+                    case Action.UnlockWithPinWrong:
+                        commands.Add(new DynamicCommand(action, model.Pin + "1"));
+                        break;
+                    case Action.SetPinCorrect:
+                        commands.Add(new DynamicCommand(action, model.Pin, model.GeneratePin()));
+                        break;
+                    case Action.SetPinWrong:
+                        commands.Add(new DynamicCommand(action, model.Pin + "1", model.GeneratePin()));
+                        break;
+                    default:
+                        commands.Add(new DynamicCommand(action));
+                        break;
+                }
             }
 
             return Gen.Elements(commands.ToArray());
