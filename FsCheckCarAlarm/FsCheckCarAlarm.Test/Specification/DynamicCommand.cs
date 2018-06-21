@@ -10,8 +10,8 @@ namespace FsCheckCarAlarm.Test.Specification
     public class DynamicCommand : Command<SUT, Model>
     {
         private Action action;
-        private string newPin;
-        private string pin;
+        //private string newPin;
+        //private string pin;
 
         public DynamicCommand(Action action) : this(action, null, null) { }
 

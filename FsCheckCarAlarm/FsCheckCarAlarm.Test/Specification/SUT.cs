@@ -11,10 +11,10 @@ namespace FsCheckCarAlarm.Test.Specification
             get { return carAlarm.State; }
         }
 
-        public bool UnlockedTrunk
+        /*public bool UnlockedTrunk
         {
             get { return carAlarm.UnlockedTrunk; }
-        }
+        }*/
 
         public SUT()
         {

@@ -8,11 +8,11 @@ namespace FsCheckCarAlarm.Test.Specification
     {
         private HashSet<Transition> transitions;
         private CarAlarmState state;
-        private string pin;
+        /*private string pin;
         private int unlockAttempts;
         private int pinChangeAttempts;
         private int closedDoors;
-        private bool unlockedTrunk;
+        private bool unlockedTrunk;*/
 
         private Random random;
 
@@ -21,7 +21,7 @@ namespace FsCheckCarAlarm.Test.Specification
             get { return state; }
         }
 
-        public string Pin
+        /*public string Pin
         {
             get { return pin; }
         }
@@ -29,7 +29,7 @@ namespace FsCheckCarAlarm.Test.Specification
         public bool UnlockedTrunk
         {
             get { return unlockedTrunk; }
-        }
+        }*/
 
         public Model()
         {
@@ -138,11 +138,11 @@ namespace FsCheckCarAlarm.Test.Specification
             }
         }
 
-        public string GeneratePin()
+        /*public string GeneratePin()
         {
             int randomNumber = random.Next(0, 10000);
             return randomNumber.ToString("D4");
-        }
+        }*/
 
         public void MakeTransition(Action action, string newPin)
         {

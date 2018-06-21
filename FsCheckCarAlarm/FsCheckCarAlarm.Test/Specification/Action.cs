@@ -8,17 +8,20 @@ namespace FsCheckCarAlarm.Test.Specification
 {
     public enum Action
     {
-        CloseDoor,
-        OpenDoor,
+        Close,
+        Open,
+        /*CloseDoor,
+        OpenDoor,*/
         Lock,
-        UnlockWithPinCorrect,
-        UnlockWithPinWrong,
+        Unlock,
+        /*UnlockWithPinCorrect,
+        UnlockWithPinWrong,*/
         Tick20,
         Tick30,
         Tick300,
-        SetPinCorrect,
+        /*SetPinCorrect,
         SetPinWrong,
         LockTrunk,
-        UnlockTrunk
+        UnlockTrunk*/
     }
 }

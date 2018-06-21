@@ -11,12 +11,12 @@ namespace FsCheckCarAlarm.Test.Specification
         private CarAlarmState from;
         private Action action;
         private CarAlarmState to;
-        private CarAlarmState? conditionalTo;
+        //private CarAlarmState? conditionalTo;
 
-        public CarAlarmState? ConditionalTo
+        /*public CarAlarmState? ConditionalTo
         {
             get { return conditionalTo; }
-        }
+        }*/
 
         public CarAlarmState To
         {
