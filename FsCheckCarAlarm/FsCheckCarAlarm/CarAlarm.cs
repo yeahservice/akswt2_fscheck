@@ -21,10 +21,10 @@ namespace FsCheckCarAlarm
             get { return state; }
         }
 
-        public bool UnlockedTrunk
+        /*public bool UnlockedTrunk
         {
             get { return unlockedTrunk; }
-        }
+        }*/
 
         public CarAlarm()
         {
@@ -37,7 +37,7 @@ namespace FsCheckCarAlarm
             unlockedTrunk = true;
         }
 
-        public void SetPinCode(string oldPin, string newPin)
+        /*public void SetPinCode(string oldPin, string newPin)
         {
             if (state == CarAlarmState.ClosedAndUnlocked || state == CarAlarmState.OpenAndUnlocked)
             {
@@ -57,14 +57,24 @@ namespace FsCheckCarAlarm
                     }
                 }
             }
-        }
+        }*/
 
         private bool IsFourDigitPin(string pin)
         {
             return (pin.Length == 4) && (pin.All(char.IsDigit));
         }
 
-        public void OpenDoor()
+        public void Open()
+        {
+
+        }
+
+        public void Close()
+        {
+
+        }
+
+        /*public void OpenDoor()
         {
             if (closedDoors > 0)
                 closedDoors--;
@@ -108,7 +118,7 @@ namespace FsCheckCarAlarm
                     }
                 }
             }
-        }
+        }*/
 
         public void Lock()
         {
@@ -164,7 +174,7 @@ namespace FsCheckCarAlarm
             }
         }
 
-        public void UnlockTrunk()
+        /*public void UnlockTrunk()
         {
             unlockedTrunk = true;
         }
@@ -172,7 +182,7 @@ namespace FsCheckCarAlarm
         public void LockTrunk()
         {
             unlockedTrunk = false;
-        }
+        }*/
 
         private void ChangeState(CarAlarmState from, CarAlarmState to)
         {
