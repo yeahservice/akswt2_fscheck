@@ -81,6 +81,8 @@ namespace FsCheckCarAlarm.Test.Specification
 
                 // setPinCode
                 { new Transition(CarAlarmState.ClosedAndUnlocked, Action.SetPinCorrect, CarAlarmState.ClosedAndUnlocked) },
+                { new Transition(CarAlarmState.ClosedAndUnlocked, Action.SetPinWrong, CarAlarmState.ClosedAndUnlocked, CarAlarmState.FlashAndSound) },
+                { new Transition(CarAlarmState.OpenAndUnlocked, Action.SetPinCorrect, CarAlarmState.OpenAndUnlocked) },
                 { new Transition(CarAlarmState.OpenAndUnlocked, Action.SetPinWrong, CarAlarmState.OpenAndUnlocked, CarAlarmState.FlashAndSound) },
 
                 // unlock/lock trunk
